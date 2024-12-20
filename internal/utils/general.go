@@ -7,16 +7,15 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/cli/go-gh"
-	"github.com/cli/go-gh/pkg/api"
-	"github.com/cli/go-gh/pkg/auth"
+	"github.com/cli/go-gh/v2/pkg/api"
+	"github.com/cli/go-gh/v2/pkg/auth"
 	"github.com/katiem0/gh-migrate-rulesets/internal/data"
 	"github.com/shurcooL/graphql"
 	"go.uber.org/zap"
 )
 
-func InitializeClients(hostname, authToken string) (api.RESTClient, api.GQLClient, error) {
-	restClient, err := gh.RESTClient(&api.ClientOptions{
+func InitializeClients(hostname, authToken string) (*api.RESTClient, *api.GraphQLClient, error) {
+	restClient, err := api.NewRESTClient(api.ClientOptions{
 		Headers: map[string]string{
 			"Accept": "application/vnd.github+json",
 		},
@@ -28,7 +27,7 @@ func InitializeClients(hostname, authToken string) (api.RESTClient, api.GQLClien
 		return nil, nil, err
 	}
 
-	gqlClient, err := gh.GQLClient(&api.ClientOptions{
+	gqlClient, err := api.NewGraphQLClient(api.ClientOptions{
 		Headers: map[string]string{
 			"Accept": "application/vnd.github.hawkgirl-preview+json",
 		},
@@ -74,11 +73,11 @@ type Getter interface {
 }
 
 type APIGetter struct {
-	gqlClient  api.GQLClient
-	restClient api.RESTClient
+	gqlClient  *api.GraphQLClient
+	restClient *api.RESTClient
 }
 
-func NewAPIGetter(gqlClient api.GQLClient, restClient api.RESTClient) *APIGetter {
+func NewAPIGetter(gqlClient *api.GraphQLClient, restClient *api.RESTClient) *APIGetter {
 	return &APIGetter{
 		gqlClient:  gqlClient,
 		restClient: restClient,
