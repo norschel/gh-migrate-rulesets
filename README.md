@@ -1,15 +1,25 @@
 # gh-migrate-rulesets
 
-A GitHub `gh` [CLI](https://cli.github.com/) extension to create a report containing repository rulesets for a single repository, list of repositories, and/or organization, as well as create repository rulesets from a file.
+[![GitHub Release](https://img.shields.io/github/v/release/katiem0/gh-environments?style=flat&logo=github)](https://github.com/katiem0/gh-migrate-rulesets/releases)
+[![PR Checks](https://github.com/katiem0/gh-migrate-rulesets/actions/workflows/main.yml/badge.svg)](https://github.com/katiem0/gh-migrate-rulesets/actions/workflows/main.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Go Report Card](https://goreportcard.com/badge/github.com/katiem0/gh-migrate-rulesets)](https://goreportcard.com/report/github.com/katiem0/gh-migrate-rulesets)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/katiem0/gh-migrate-rulesets)](https://go.dev/)
+
+A GitHub `gh` [CLI](https://cli.github.com/) extension to create a report containing repository
+rulesets for a single repository, list of repositories, and/or organization, as well as create
+repository rulesets from a file.
 
 > [!NOTE]
-> The authenticated user must be an organization owner and a GitHub Personal Access Token needs the `admin:read` scope at the organization level to use this CLI extension to it's fullest.
+> The authenticated user must be an organization owner and a GitHub Personal Access Token needs the
+> `admin:read` scope at the organization level to use this CLI extension to it's fullest.
 
 ## Installation
 
 1. Install the `gh` CLI - see the [installation](https://github.com/cli/cli#installation) instructions.
 
 2. Install the extension:
+
    ```sh
    gh extension install katiem0/gh-migrate-rulesets
    ```
@@ -18,7 +28,8 @@ For more information: [`gh extension install`](https://cli.github.com/manual/gh_
 
 ## Usage
 
-The `gh-migrate-rulesets` extension supports `GitHub.com` and GitHub Enterprise Server, through the use of `--hostname` and the following commands:
+The `gh-migrate-rulesets` extension supports `GitHub.com` and GitHub Enterprise Server,
+through the use of `--hostname` and the following commands:
 
 ```sh
 $ gh migrate-rulesets -h
@@ -39,7 +50,10 @@ Use "migrate-rules [command] --help" for more information about a command.
 
 ### List Repository Rulesets
 
-The `gh migrate-rulesets list` command will create a csv report of repository rulesets for the specified `<organization>` and/or `[repo ..]` list, with the ability to specify the `--host-name` and `--token` associated to a Server instance. If only `<organization>` is provided, all repositories will be used.
+The `gh migrate-rulesets list` command will create a csv report of repository rulesets for the specified
+`<organization>` and/or `[repo ..]` list, with the ability to specify the `--host-name` and
+`--token` associated to a Server instance. If only `<organization>` is provided, all
+repositories will be used.
 
 To specify the type of ruleset to list, setting the `--ruleType` flag will either list:
 
@@ -65,6 +79,7 @@ Flags:
 
 The output `csv` file contains the following information:
 
+<!-- markdownlint-disable MD013 -->
 <details>
 <summary><b>Click to Expand output <code>csv</code> file contents</b></summary>
 <table>
@@ -108,13 +123,17 @@ The output `csv` file contains the following information:
 <tr><td><code>UpdatedAt</code></td><td>Timestamp of when the ruleset was last updated.</td></tr>
 </table>
 </details>
-   
+<!-- markdownlint-enable MD013 -->
+
 ### Create Repository Rulesets
 
-Repository Rulesets can be created from a `csv` file using `--from-file` following the format outlined in [`gh-migrate-rulesets list`](#list-repository-rulesets), or specifying the `--source-org` and/or `--repos` to retrieve rulesets from.
+Repository Rulesets can be created from a `csv` file using `--from-file` following the format outlined
+in [`gh-migrate-rulesets list`](#list-repository-rulesets), or specifying the `--source-org` and/or
+`--repos` to retrieve rulesets from.
 
 > [!WARNING]
-> If your rulesets include the following rules, ensure that the `csv` has been updated to point to the updated information under your organization:
+> If your rulesets include the following rules, ensure that the `csv` has been updated to point to
+> the updated information under your organization:
 >
 > - Bypass Actors: Update Actor ID for Teams, Roles, and Integrations
 > - Status Checks: Ensure Context name exists and update Integration ID
@@ -142,7 +161,8 @@ Flags:
   -t, --token string             GitHub personal access token for organization to write to (default "gh auth token")
 ```
 
-If specifying `--source-org` and/or `--repos`, the CLI extension will attempt to map the object based on name to the new ID under the target organization:
+If specifying `--source-org` and/or `--repos`, the CLI extension will attempt to map the object
+based on name to the new ID under the target organization:
 
 - Bypass Actors
   - Teams
@@ -153,6 +173,6 @@ If specifying `--source-org` and/or `--repos`, the CLI extension will attempt to
 - Required Workflow
   - Repository
 
-
 > [!NOTE]
-> If a ruleset fails to be created, a ruleset's Source, Name, and Error will be written to a `csv` file in the current directory with the name format `<org>-ruleset-errors-<date>.csv`.
+> If a ruleset fails to be created, a ruleset's Source, Name, and Error will be written to a `csv`
+> file in the current directory with the name format `<org>-ruleset-errors-<date>.csv`.

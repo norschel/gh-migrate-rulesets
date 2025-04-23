@@ -91,7 +91,11 @@ func (g *APIGetter) CreateOrgLevelRuleset(owner string, data io.Reader) error {
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			zap.S().Errorf("Error closing response body: %v", err)
+		}
+	}()
 	return nil
 }
 
@@ -102,7 +106,11 @@ func (g *APIGetter) CreateRepoLevelRuleset(ownerRepo string, data io.Reader) err
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			zap.S().Errorf("Error closing response body: %v", err)
+		}
+	}()
 	return nil
 }
 
@@ -196,7 +204,11 @@ func (g *APIGetter) GetAnApp(appSlug string) (*data.AppInfo, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			zap.S().Errorf("Error closing response body: %v", err)
+		}
+	}()
 
 	responseData, err := io.ReadAll(resp.Body)
 	if err != nil {
@@ -219,7 +231,11 @@ func (g *APIGetter) GetAppInstallations(owner string) (*data.AppIntegrations, er
 			zap.S().Error("Error raised in getting app installations", zap.Error(err))
 			return nil, err
 		}
-		defer resp.Body.Close()
+		defer func() {
+			if err := resp.Body.Close(); err != nil {
+				zap.S().Errorf("Error closing response body: %v", err)
+			}
+		}()
 		responseData, err := io.ReadAll(resp.Body)
 		if err != nil {
 			zap.S().Error("Error reading response body", zap.Error(err))
@@ -271,7 +287,11 @@ func (g *APIGetter) GetCustomRoles(owner string, roleID int) (*data.CustomRole, 
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			zap.S().Errorf("Error closing response body: %v", err)
+		}
+	}()
 
 	responseData, err := io.ReadAll(resp.Body)
 	if err != nil {
@@ -290,7 +310,11 @@ func (g *APIGetter) GetRepoCustomRoles(owner string) (*data.CustomRepoRoles, err
 			zap.S().Error("Error raised in getting repo custom roles", zap.Error(err))
 			return nil, err
 		}
-		defer resp.Body.Close()
+		defer func() {
+			if err := resp.Body.Close(); err != nil {
+				zap.S().Errorf("Error closing response body: %v", err)
+			}
+		}()
 		responseData, err := io.ReadAll(resp.Body)
 		if err != nil {
 			zap.S().Error("Error reading response body", zap.Error(err))
@@ -325,8 +349,11 @@ func (g *APIGetter) GetOrgLevelRuleset(owner string, rulesetId int) ([]byte, err
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
-
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			zap.S().Errorf("Error closing response body: %v", err)
+		}
+	}()
 	responseData, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
@@ -361,8 +388,11 @@ func (g *APIGetter) GetRepoLevelRuleset(owner string, repo string, rulesetId int
 	url := fmt.Sprintf("repos/%s/%s/rulesets/%s", owner, repo, strconv.Itoa(rulesetId))
 
 	resp, _ := g.restClient.Request("GET", url, nil)
-	defer resp.Body.Close()
-
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			zap.S().Errorf("Error closing response body: %v", err)
+		}
+	}()
 	responseData, _ := io.ReadAll(resp.Body)
 	return responseData, nil
 }
@@ -371,7 +401,11 @@ func (g *APIGetter) GetRepoByID(repoID int) (*data.RepoInfo, error) {
 	url := fmt.Sprintf("repositories/%s", strconv.Itoa(repoID))
 
 	resp, _ := g.restClient.Request("GET", url, nil)
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			zap.S().Errorf("Error closing response body: %v", err)
+		}
+	}()
 	responseData, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
@@ -411,7 +445,11 @@ func (g *APIGetter) GetTeamData(ownerID int, teamID int) (*data.TeamInfo, error)
 	url := fmt.Sprintf("organizations/%s/team/%s", strconv.Itoa(ownerID), strconv.Itoa(teamID))
 
 	resp, _ := g.restClient.Request("GET", url, nil)
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			zap.S().Errorf("Error closing response body: %v", err)
+		}
+	}()
 	responseData, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
@@ -429,7 +467,11 @@ func (g *APIGetter) GetTeamByName(owner string, teamSlug string) (*data.TeamInfo
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			zap.S().Errorf("Error closing response body: %v", err)
+		}
+	}()
 
 	responseData, err := io.ReadAll(resp.Body)
 	if err != nil {
@@ -453,6 +495,10 @@ func (g *APIGetter) RepoExists(ownerRepo string) bool {
 		}
 		return false
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			zap.S().Errorf("Error closing response body: %v", err)
+		}
+	}()
 	return true
 }
