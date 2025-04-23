@@ -1,6 +1,6 @@
 # gh-migrate-rulesets
 
-[![GitHub Release](https://img.shields.io/github/v/release/katiem0/gh-environments?style=flat&logo=github)](https://github.com/katiem0/gh-migrate-rulesets/releases)
+[![GitHub Release](https://img.shields.io/github/v/release/katiem0/gh-migrate-rulesets?style=flat&logo=github)](https://github.com/katiem0/gh-migrate-rulesets/releases)
 [![PR Checks](https://github.com/katiem0/gh-migrate-rulesets/actions/workflows/main.yml/badge.svg)](https://github.com/katiem0/gh-migrate-rulesets/actions/workflows/main.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Go Report Card](https://goreportcard.com/badge/github.com/katiem0/gh-migrate-rulesets)](https://goreportcard.com/report/github.com/katiem0/gh-migrate-rulesets)
