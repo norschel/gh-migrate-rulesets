@@ -102,7 +102,11 @@ func runCmdCreate(owner string, cmdFlags *cmdFlags, g *utils.APIGetter, s *utils
 			zap.S().Errorf("Error arose opening branch protection policies csv file")
 			return err
 		}
-		defer f.Close()
+		defer func() {
+			if err := f.Close(); err != nil {
+				zap.S().Errorf("Error closing file: %v", err)
+			}
+		}()
 		csvReader := csv.NewReader(f)
 		rulesetData, err = csvReader.ReadAll()
 		zap.S().Debugf("Reading in all lines from csv file")

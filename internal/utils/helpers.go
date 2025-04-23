@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/katiem0/gh-migrate-rulesets/internal/data"
+	"go.uber.org/zap"
 )
 
 func Contains(slice []string, item string) bool {
@@ -27,9 +28,10 @@ func SplitIgnoringBraces(s, delimiter string) []string {
 	for i := 0; i < len(s); i++ {
 		char := s[i]
 
-		if char == '{' {
+		switch char {
+		case '{':
 			inBraces = true
-		} else if char == '}' {
+		case '}':
 			inBraces = false
 		}
 
@@ -67,7 +69,11 @@ func WriteErrorRulesetsToCSV(errorRulesets []data.ErrorRulesets, fileName string
 	if err != nil {
 		return fmt.Errorf("failed to create file: %w", err)
 	}
-	defer file.Close()
+	defer func() {
+		if err := file.Close(); err != nil {
+			zap.S().Errorf("Error closing file: %v", err)
+		}
+	}()
 
 	writer := csv.NewWriter(file)
 	defer writer.Flush()

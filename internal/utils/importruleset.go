@@ -39,12 +39,14 @@ func (g *APIGetter) CreateRepoRulesetsData(owner string, fileData [][]string) []
 }
 
 func determineSource(owner, sourceType, repoName string) string {
-	if sourceType == "Organization" {
+	switch sourceType {
+	case "Organization":
 		return owner
-	} else if sourceType == "Repository" {
+	case "Repository":
 		return fmt.Sprintf("%s/%s", owner, repoName)
+	default:
+		return ""
 	}
-	return ""
 }
 
 func parseConditions(conditions []string) *data.Conditions {
