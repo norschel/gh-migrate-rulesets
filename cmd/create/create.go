@@ -235,11 +235,7 @@ func runCmdCreate(owner string, cmdFlags *cmdFlags, g *utils.APIGetter, s *utils
 
 			if cmdFlags.ruleType == "all" || cmdFlags.ruleType == "repoOnly" {
 				zap.S().Infof("Gathering repositories specified in org %s to list rulesets for", sourceOrg)
-				allRepos, err := g.GatherRepositories(sourceOrg, repos)
-				if err != nil {
-					zap.S().Error("Error raised in gathering repos", zap.Error(err))
-					return err
-				}
+				allRepos := g.GatherRepositories(sourceOrg, repos)
 				allRepoRules, err := g.FetchRepoRulesets(sourceOrg, allRepos)
 				if err != nil {
 					zap.S().Error("Error raised in fetching repo ruleset data", zap.Error(err))

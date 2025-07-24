@@ -215,11 +215,7 @@ func runCmdList(owner string, repos []string, cmdFlags *cmdFlags, g *utils.APIGe
 
 		if cmdFlags.ruleType == "all" || cmdFlags.ruleType == "repoOnly" {
 			zap.S().Infof("Gathering repositories specified in org %s to list rulesets for", owner)
-			allRepos, err := g.GatherRepositories(owner, repos)
-			if err != nil {
-				zap.S().Error("Error raised in gathering repos", zap.Error(err))
-				return err
-			}
+			allRepos := g.GatherRepositories(owner, repos)
 			allRepoRules, err := g.FetchRepoRulesets(owner, allRepos)
 			if err != nil {
 				zap.S().Error("Error raised in fetching repo ruleset data", zap.Error(err))
