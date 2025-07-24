@@ -169,7 +169,7 @@ func (g *APIGetter) FetchRepoRulesets(owner string, repos []data.RepoInfo) ([]da
 	return allRepoRules, nil
 }
 
-func (g *APIGetter) GatherRepositories(owner string, repos []string) ([]data.RepoInfo, error) {
+func (g *APIGetter) GatherRepositories(owner string, repos []string) []data.RepoInfo {
 	var allRepos []data.RepoInfo
 	var reposCursor *string
 
@@ -187,7 +187,7 @@ func (g *APIGetter) GatherRepositories(owner string, repos []string) ([]data.Rep
 			reposQuery, err := g.GetReposList(owner, reposCursor)
 			if err != nil {
 				zap.S().Error("Error raised in processing list of repos", zap.Error(err))
-				return nil, err
+				return allRepos
 			}
 			allRepos = append(allRepos, reposQuery.Organization.Repositories.Nodes...)
 			reposCursor = &reposQuery.Organization.Repositories.PageInfo.EndCursor
@@ -196,7 +196,7 @@ func (g *APIGetter) GatherRepositories(owner string, repos []string) ([]data.Rep
 			}
 		}
 	}
-	return allRepos, nil
+	return allRepos
 }
 func (g *APIGetter) GetAnApp(appSlug string) (*data.AppInfo, error) {
 	url := fmt.Sprintf("apps/%s", appSlug)

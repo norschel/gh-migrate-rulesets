@@ -79,8 +79,10 @@ func ProcessConditions(ruleset data.RepoRuleset) data.ProcessedConditions {
 			PropertyInclude = ProcessProperties(ruleset.Conditions.RepositoryProperty.Include)
 			PropertyExclude = ProcessProperties(ruleset.Conditions.RepositoryProperty.Exclude)
 		}
-		includeRefNames = strings.Join(ruleset.Conditions.RefName.Include, ";")
-		excludeRefNames = strings.Join(ruleset.Conditions.RefName.Exclude, ";")
+		if ruleset.Conditions.RefName != nil {
+			includeRefNames = strings.Join(ruleset.Conditions.RefName.Include, ";")
+			excludeRefNames = strings.Join(ruleset.Conditions.RefName.Exclude, ";")
+		}
 	}
 	return data.ProcessedConditions{
 		IncludeNames:    includeNames,
