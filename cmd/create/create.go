@@ -134,7 +134,7 @@ func runCmdCreate(owner string, cmdFlags *cmdFlags, g *utils.APIGetter, s *utils
 			}
 			reader := bytes.NewReader(createRulesetJSON)
 			if ruleset.SourceType == "Organization" {
-				zap.S().Debugf("Creating rulesets under %s", owner)
+				zap.S().Debugf("Creating organization rulesets under %s", owner)
 				err = g.CreateOrgLevelRuleset(owner, reader)
 				if err != nil {
 					if strings.Contains(err.Error(), "\n") {
@@ -148,6 +148,7 @@ func runCmdCreate(owner string, cmdFlags *cmdFlags, g *utils.APIGetter, s *utils
 				}
 				zap.S().Infof("Successfully create repository ruleset %s for %s", ruleset.Name, owner)
 			} else if ruleset.SourceType == "Repository" {
+				zap.S().Debugf("Trying to create repository rulesets under %s/%s", owner, ruleset.Source)
 				exists := g.RepoExists(ruleset.Source)
 				if !exists {
 					zap.S().Debugf("Repository %s does not exist", ruleset.Source)
