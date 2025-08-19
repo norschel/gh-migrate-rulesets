@@ -488,7 +488,7 @@ func (g *APIGetter) GetTeamByName(owner string, teamSlug string) (*data.TeamInfo
 
 func (g *APIGetter) RepoExists(ownerRepo string) bool {
 	url := fmt.Sprintf("repos/%s", ownerRepo)
-	zap.S().Debugf("Checking if repository %s exists", ownerRepo)
+	zap.S().Debugf("Checking if repository %s exists (%s)", ownerRepo, url)
 	resp, err := g.restClient.Request("GET", url, nil)
 	if err != nil {
 		if resp != nil && resp.StatusCode == 404 {
