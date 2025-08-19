@@ -148,7 +148,7 @@ func runCmdCreate(owner string, cmdFlags *cmdFlags, g *utils.APIGetter, s *utils
 				}
 				zap.S().Infof("Successfully create repository ruleset %s for %s", ruleset.Name, owner)
 			} else if ruleset.SourceType == "Repository" {
-				zap.S().Debugf("Trying to create repository rulesets under %s/%s", owner, ruleset.Source)
+				zap.S().Debugf("Trying to create repository rulesets under %s", ruleset.Source)
 				exists := g.RepoExists(ruleset.Source)
 				if !exists {
 					zap.S().Debugf("Repository %s does not exist", ruleset.Source)
