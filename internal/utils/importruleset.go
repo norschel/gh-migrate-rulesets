@@ -109,10 +109,14 @@ func (g *APIGetter) parseRules(owner string, headerMap []string, ruleValues []st
 }
 
 func CleanConditions(conditions *data.Conditions) *data.Conditions {
-	conditions.RefName.Include = CleanSlice(conditions.RefName.Include)
-	conditions.RefName.Exclude = CleanSlice(conditions.RefName.Exclude)
-	conditions.RepositoryName.Include = CleanSlice(conditions.RepositoryName.Include)
-	conditions.RepositoryName.Exclude = CleanSlice(conditions.RepositoryName.Exclude)
+	if conditions.RefName != nil {
+		conditions.RefName.Include = CleanSlice(conditions.RefName.Include)
+		conditions.RefName.Exclude = CleanSlice(conditions.RefName.Exclude)
+	}
+	if conditions.RepositoryName != nil {
+		conditions.RepositoryName.Include = CleanSlice(conditions.RepositoryName.Include)
+		conditions.RepositoryName.Exclude = CleanSlice(conditions.RepositoryName.Exclude)
+	}
 
 	if ShouldRemoveRepositoryName(conditions.RepositoryName) {
 		conditions.RepositoryName = nil
