@@ -276,7 +276,7 @@ func ParseParameters(paramStr string) map[string]interface{} {
 				continue
 			}
 			key := kv[0]
-			// Handle cases where the value itself contains ":"
+			// Handle cases where the value (e.g., regex patterns) contains ":" characters
 			value := strings.Join(kv[1:], ":")
 
 			if strings.Contains(value, "{") {
