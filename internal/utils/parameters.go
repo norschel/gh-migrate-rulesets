@@ -269,14 +269,15 @@ func ParseParameters(paramStr string) map[string]interface{} {
 	if paramStr == "" {
 		return nil
 	} else {
-		paramPairs := SplitIgnoringBraces(paramStr, "|")
+		paramPairs := SplitIgnoringBraces(paramStr, "#|#")
 		for _, pair := range paramPairs {
 			kv := strings.Split(pair, ":")
-			if len(kv) != 2 {
+			if len(kv) < 2 {
 				continue
 			}
 			key := kv[0]
-			value := kv[1]
+			// Handle cases where the value (e.g., regex patterns) contains ":" characters
+			value := strings.Join(kv[1:], ":")
 
 			if strings.Contains(value, "{") {
 				subGroups := strings.Split(value, ";")
