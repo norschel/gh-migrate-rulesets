@@ -101,7 +101,7 @@ func ProcessProperties(properties []data.PropertyPattern) []string {
 		propertyList := []string{
 			property.Name,
 			property.Source,
-			fmt.Sprintf("{%s}", strings.Join(property.PropertyValues, "#|#")),
+			fmt.Sprintf("{%s}", strings.Join(property.PropertyValues, "###")),
 		}
 		propertyStrings = append(propertyStrings, strings.Join(propertyList, ";"))
 	}
@@ -121,7 +121,7 @@ func (g *APIGetter) ProcessRules(rules []data.Rules) map[string]string {
 				formattedParams = append(formattedParams, fmt.Sprintf("%s:%v", key, value))
 			}
 			if len(formattedParams) > 0 {
-				rulesMap[rule.Type] = strings.Join(formattedParams, "#|#")
+				rulesMap[rule.Type] = strings.Join(formattedParams, "###")
 			}
 		}
 	}
