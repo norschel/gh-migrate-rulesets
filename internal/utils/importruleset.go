@@ -69,7 +69,7 @@ func parseConditions(conditions []string) *data.Conditions {
 }
 
 func parsePropertyPatterns(patternsStr string) []data.PropertyPattern {
-	patterns := SplitIgnoringBraces(patternsStr, "#|#")
+	patterns := SplitIgnoringBraces(patternsStr, "|")
 	propertyPatterns := make([]data.PropertyPattern, 0, len(patterns))
 	for _, pattern := range patterns {
 		patternData := strings.Split(pattern, ";")
