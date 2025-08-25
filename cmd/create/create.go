@@ -34,6 +34,7 @@ type cmdFlags struct {
 func NewCmdCreate() *cobra.Command {
 	cmdFlags := cmdFlags{}
 	var authToken, authSourceToken string
+	var restSrcClient, gqlSrcClient interface{}
 
 	createCmd := &cobra.Command{
 		Use:   "create [flags] <organization>",
@@ -59,10 +60,13 @@ func NewCmdCreate() *cobra.Command {
 				return err
 			}
 
-			authSourceToken = utils.GetAuthToken(cmdFlags.sourceToken, cmdFlags.sourceHostname)
-			restSrcClient, gqlSrcClient, err := utils.InitializeClients(cmdFlags.sourceHostname, authSourceToken)
-			if err != nil {
-				return err
+			// only initialize source clients if not creating from file
+			if len(cmdFlags.fileName) == 0 {
+				authSourceToken = utils.GetAuthToken(cmdFlags.sourceToken, cmdFlags.sourceHostname)
+				restSrcClient, gqlSrcClient, err = utils.InitializeClients(cmdFlags.sourceHostname, authSourceToken)
+				if err != nil {
+					return err
+				}
 			}
 			owner := args[0]
 
