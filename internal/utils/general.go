@@ -15,6 +15,7 @@ import (
 )
 
 func InitializeClients(hostname, authToken string) (*api.RESTClient, *api.GraphQLClient, error) {
+	zap.S().Debugf("Initializing REST client for hostname: %s", hostname)
 	restClient, err := api.NewRESTClient(api.ClientOptions{
 		Headers: map[string]string{
 			"Accept": "application/vnd.github+json",
@@ -27,6 +28,7 @@ func InitializeClients(hostname, authToken string) (*api.RESTClient, *api.GraphQ
 		return nil, nil, err
 	}
 
+	zap.S().Debugf("Initializing GraphQL client for hostname: %s", hostname)
 	gqlClient, err := api.NewGraphQLClient(api.ClientOptions{
 		Headers: map[string]string{
 			"Accept": "application/vnd.github.hawkgirl-preview+json",
@@ -39,13 +41,16 @@ func InitializeClients(hostname, authToken string) (*api.RESTClient, *api.GraphQ
 		return nil, nil, err
 	}
 
+	zap.S().Debugf("Successfully initialized GitHub clients")
 	return restClient, gqlClient, nil
 }
 
 func GetAuthToken(token, hostname string) string {
 	if token != "" {
+		zap.S().Debugf("Using CLI-provided token for hostname: %s", hostname)
 		return token
 	}
+	zap.S().Debugf("Retrieving token from gh auth for hostname: %s", hostname)
 	t, _ := auth.TokenForHost(hostname)
 	return t
 }

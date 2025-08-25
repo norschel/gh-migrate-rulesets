@@ -19,10 +19,13 @@ func (g *APIGetter) ProcessActorsForExport(actors []data.BypassActor, owner stri
 			actor.ActorID = &defaultID
 		}
 		if _, ok := data.RolesMap[strconv.Itoa(*actor.ActorID)]; ok {
+			zap.S().Debugf("Bypass Actor ID %d is a built-in role", *actor.ActorID)
 			actorName = data.RolesMap[strconv.Itoa(*actor.ActorID)]
+			zap.S().Debugf("Bypass Actor is a built-in role: %s", actorName)
 		} else {
 			if actor.ActorType == "RepositoryRole" {
 				zap.S().Debugf("Processing bypass actor custom repository role")
+
 				roleName, err := g.GetCustomRoles(owner, *actor.ActorID)
 				if err != nil {
 					zap.S().Errorf("Failed to get custom role data for actor ID %d: %v", actor.ActorID, err)
@@ -101,7 +104,7 @@ func ProcessProperties(properties []data.PropertyPattern) []string {
 		propertyList := []string{
 			property.Name,
 			property.Source,
-			fmt.Sprintf("{%s}", strings.Join(property.PropertyValues, "#|#")),
+			fmt.Sprintf("{%s}", strings.Join(property.PropertyValues, "###")),
 		}
 		propertyStrings = append(propertyStrings, strings.Join(propertyList, ";"))
 	}
@@ -121,7 +124,7 @@ func (g *APIGetter) ProcessRules(rules []data.Rules) map[string]string {
 				formattedParams = append(formattedParams, fmt.Sprintf("%s:%v", key, value))
 			}
 			if len(formattedParams) > 0 {
-				rulesMap[rule.Type] = strings.Join(formattedParams, "#|#")
+				rulesMap[rule.Type] = strings.Join(formattedParams, "###")
 			}
 		}
 	}
