@@ -14,7 +14,6 @@ import (
 	"github.com/katiem0/gh-migrate-rulesets/internal/log"
 	"github.com/katiem0/gh-migrate-rulesets/internal/utils"
 
-	// Add this line
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 )
@@ -59,14 +58,21 @@ func NewCmdCreate() *cobra.Command {
 				return err
 			}
 
-			authSourceToken = utils.GetAuthToken(cmdFlags.sourceToken, cmdFlags.sourceHostname)
-			restSrcClient, gqlSrcClient, err := utils.InitializeClients(cmdFlags.sourceHostname, authSourceToken)
-			if err != nil {
-				return err
-			}
 			owner := args[0]
 
-			return runCmdCreate(owner, &cmdFlags, utils.NewAPIGetter(gqlClient, restClient), utils.NewAPIGetter(gqlSrcClient, restSrcClient))
+			if len(cmdFlags.fileName) == 0 {
+				zap.S().Debug("Using source organization, so initializing source client")
+				authSourceToken = utils.GetAuthToken(cmdFlags.sourceToken, cmdFlags.sourceHostname)
+				restSrcClient, gqlSrcClient, err := utils.InitializeClients(cmdFlags.sourceHostname, authSourceToken)
+				if err != nil {
+					return err
+				}
+				return runCmdCreate(owner, &cmdFlags, utils.NewAPIGetter(gqlClient, restClient), utils.NewAPIGetter(gqlSrcClient, restSrcClient))
+			} else {
+				zap.S().Debug("Not using source organization, so not initializing source client")
+				return runCmdCreate(owner, &cmdFlags, utils.NewAPIGetter(gqlClient, restClient), nil)
+			}
+
 		},
 	}
 	ruleDefault := "all"
