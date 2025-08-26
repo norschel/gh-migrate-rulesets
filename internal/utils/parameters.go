@@ -269,7 +269,7 @@ func ParseParameters(paramStr string) map[string]interface{} {
 	if paramStr == "" {
 		return nil
 	} else {
-		paramPairs := SplitIgnoringBraces(paramStr, "#|#")
+		paramPairs := SplitIgnoringBraces(paramStr, "###")
 		for _, pair := range paramPairs {
 			kv := strings.Split(pair, ":")
 			if len(kv) < 2 {
