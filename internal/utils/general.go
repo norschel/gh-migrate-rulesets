@@ -449,7 +449,11 @@ func (g *APIGetter) GetRepoRulesetsList(owner string, repo string, endCursor *st
 func (g *APIGetter) GetTeamData(ownerID int, teamID int) (*data.TeamInfo, error) {
 	url := fmt.Sprintf("organizations/%s/team/%s", strconv.Itoa(ownerID), strconv.Itoa(teamID))
 
-	resp, _ := g.restClient.Request("GET", url, nil)
+	resp, err := g.restClient.Request("GET", url, nil)
+	if err != nil {
+		zap.S().Error("Error raised in getting team data", zap.Error(err))
+		return nil, err
+	}
 	defer func() {
 		if err := resp.Body.Close(); err != nil {
 			zap.S().Errorf("Error closing response body: %v", err)
