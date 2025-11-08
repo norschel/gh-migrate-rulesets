@@ -451,6 +451,7 @@ func (g *APIGetter) GetTeamData(ownerID int, teamID int) (*data.TeamInfo, error)
 
 	resp, err := g.restClient.Request("GET", url, nil)
 	if err != nil {
+		zap.S().Error("Error raised in getting team data", zap.Error(err))
 		return nil, err
 	}
 	defer func() {
